@@ -7,6 +7,11 @@
 
 require('./bootstrap');
 
+window.Vue = require('vue');
+
+import VeeValidate from 'vee-validate';
+
+Vue.use(VeeValidate);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -14,6 +19,7 @@ require('./bootstrap');
  */
 
 Vue.component('example', require('./components/Example.vue'));
+Vue.component('loginform', require('./components/auth/LoginForm.vue'));
 
 const app = new Vue({
     el: '#app'
