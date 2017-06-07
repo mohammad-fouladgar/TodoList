@@ -15,6 +15,18 @@ Route::get('/',function(){
 	return redirect()->to('dashboard');
 });
 
+Route::get('/api/user',function(){
+
+	$model   = auth()->user()->todolists()->searchPaginateAndOrder();
+	$columns = App\Todolist::$columns;
+
+    return response()
+            ->json([
+                'model' => $model,
+                'columns' => $columns
+            ]);
+});
+
 Auth::routes();
 
 Route::get('/dashboard', 'DashboardController@index')->name('dashboard');

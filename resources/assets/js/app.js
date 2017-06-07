@@ -10,6 +10,7 @@ require('./bootstrap');
 window.Vue = require('vue');
 
 import VeeValidate from 'vee-validate';
+import DataViewer from './components/DataViewer.vue';
 
 Vue.use(VeeValidate);
 /**
@@ -23,5 +24,8 @@ Vue.component('loginform', require('./components/auth/LoginForm.vue'));
 Vue.component('registerform', require('./components/auth/RegisterForm.vue'));
 
 const app = new Vue({
-    el: '#app'
+    el: '#app',
+    components: {
+    	DataViewer
+	}
 });

@@ -1,11 +1,22 @@
 <?php
-
 namespace App;
 
+use App\Foundation\DataViewer;
 use Illuminate\Database\Eloquent\Model;
 
 class Todolist extends Model
 {
+
+    use DataViewer;
+
+    /**
+     * [$columns description]
+     * @var [type]
+     */
+     public static $columns = [
+        'id','user_id', 'title', 'description','status', 'created_at', 'updated_at'
+    ];
+
     /**
      * The attributes that are mass assignable.
      *
