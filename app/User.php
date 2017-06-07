@@ -54,4 +54,12 @@ class User extends Authenticatable
 
         return $this;
     }
+
+    /**
+     * Get the todolists for the user.
+     */
+    public function todolists()
+    {
+        return $this->hasMany('App\Todolist');
+    }
 }
