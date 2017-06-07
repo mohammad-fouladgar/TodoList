@@ -5,7 +5,15 @@
       <div class="panel panel-default">
         <div class="panel-heading">Login</div>
         <div class="panel-body">
-            <!-- <form  action="login" class="form-horizontal" role="form" method="POST" > -->
+            <div class="alert alert-danger" v-if="error" >
+                {{ error }}
+            </div>
+
+            <div class="alert alert-success" v-if="success" >
+                {{ success }}
+            </div>
+
+            <form  action="login" class="form-horizontal" role="form" method="POST" >
                 
                 <div class="form-group" :class="{'has-error': errors.has('email') }">
                     <label for="email" class="col-md-4 control-label">E-Mail Address</label>
@@ -42,12 +50,12 @@
 
                 <div class="form-group">
                     <div class="col-md-8 col-md-offset-4">
-                        <button type="submit" class="btn btn-primary" :disabled="!isValid" @click="login">
+                        <button type="submit" class="btn btn-primary" :disabled="!isValid" @click="validateForm">
                             Login
                         </button>
                     </div>
                 </div>
-            <!-- </form> -->
+            </form>
         </div>
       </div>
     </div>
@@ -58,11 +66,19 @@
 <script>
 
 export default {
-  name: 'loginform',
+    name: 'loginform',
+    props:{
+        action: {
+            type: String,
+            required: true
+        },
+    },
   data: () => ({
     email: '',
     password : '',
-    remember:''
+    remember:'',
+    error : '',
+    success : ''
   }),
   computed: {
     
@@ -78,41 +94,37 @@ export default {
     }
   },
  methods: {
-    validateForm() {
+    validateForm(e) {
+        e.preventDefault();
+
       this.$validator.validateAll().then(() => {
-          // eslint-disable-next-line
-      //    this.$http.post('login',{}).then((response) => {
-      //             console.log(response);
-      //          }, (response) => {
-      //             console.log(response);
-               
-      //          });
           
+          this.login();
+
       }).catch(() => {
           // eslint-disable-next-line
-          alert('Correct them errors!');
+          
       });
      
     },
+
     login(){
 
-      // this.$http.post('login',{}).then((response) => {
-      //             console.log(response);
-      //          }, (response) => {
-      //             console.log(response);
-               
-      //          });
+      var $this = this;
 
-      axios.post('/login',{
-        email : this.email,
-        password : this.password,
-        remember : this.remember
+      axios.post(this.action,{email : this.email, password : this.password, remember : this.remember
       })
         .then(function (response) {
-        console.log(response);
+        // console.log(response);
+          $this.success = response.data.message;
+          $this.error = '';
+          setTimeout(function(){
+            window.location = response.data.responseURL;
+          }, 200);
+
         })
         .catch(function (error) {
-            console.log(error);
+            $this.error = error.response.data.email;
         });
     }
   }

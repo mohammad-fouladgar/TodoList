@@ -6,6 +6,8 @@ use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\Request;
+use Illuminate\Auth\Events\Registered;
 
 class RegisterController extends Controller
 {
@@ -27,7 +29,14 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/dashboard';
+    protected $redirectTo = 'dashboard';
+
+    /**
+     * The user must verify your email before login.
+     * 
+     * @var boolean
+     */
+    protected $emailConfirmationBeforeLogin = true;
 
     /**
      * Create a new controller instance.
@@ -55,6 +64,46 @@ class RegisterController extends Controller
     }
 
     /**
+     * Handle a registration request for the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function register(Request $request)
+    {
+        $this->validator($request->all())->validate();
+
+         \DB::beginTransaction();
+        try{
+            $user = $this->create($request->all());
+
+            $eventConstruct = [
+                    'user' =>[
+                        'email'    => $user->email,
+                        'fullname' => $user->name,
+                        'token'    => $user->token
+                    ]
+                ];
+
+            if ( ! property_exists($this,'emailConfirmationBeforeLogin') OR 
+                    ! $this->emailConfirmationBeforeLogin)
+            {
+                $this->guard()->login($user);
+            }
+
+            event(new Registered($eventConstruct));
+
+         } catch (\Exception $ex) { \DB::rollback(); throw $ex; }
+          \DB::commit();
+
+          return response()->json([
+            'message'     =>'Your account has been created successfully! Please Check Your e-mail and try again to login.',
+            'responseURL' => $this->redirectPath()
+        ]);
+
+    }
+
+    /**
      * Create a new user instance after a valid registration.
      *
      * @param  array  $data
@@ -68,4 +117,19 @@ class RegisterController extends Controller
             'password' => bcrypt($data['password']),
         ]);
     }
+
+    /**
+     * Confirm a user's email address.
+     *
+     * @param  string $token
+     * @return mixed
+     */
+    public function confirmEmail($token)
+    {
+        User::whereToken($token)->firstOrFail()->confirmEmail();
+
+        return redirect()->route('login')->with('flash_message','You are now activated!');
+    }
+
+
 }

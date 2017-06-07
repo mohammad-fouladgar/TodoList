@@ -20996,6 +20996,7 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0_vee_validate___default.a);
 
 Vue.component('example', __webpack_require__(38));
 Vue.component('loginform', __webpack_require__(39));
+Vue.component('registerform', __webpack_require__(53));
 
 var app = new Vue({
   el: '#app'
@@ -21940,15 +21941,31 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'loginform',
+  props: {
+    action: {
+      type: String,
+      required: true
+    }
+  },
   data: function data() {
     return {
       email: '',
       password: '',
-      remember: ''
+      remember: '',
+      error: '',
+      success: ''
     };
   },
   computed: {
@@ -21964,38 +21981,33 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     }
   },
   methods: {
-    validateForm: function validateForm() {
+    validateForm: function validateForm(e) {
+      var _this = this;
+
+      e.preventDefault();
+
       this.$validator.validateAll().then(function () {
-        // eslint-disable-next-line
-        //    this.$http.post('login',{}).then((response) => {
-        //             console.log(response);
-        //          }, (response) => {
-        //             console.log(response);
 
-        //          });
-
+        _this.login();
       }).catch(function () {
         // eslint-disable-next-line
-        alert('Correct them errors!');
+
       });
     },
     login: function login() {
 
-      // this.$http.post('login',{}).then((response) => {
-      //             console.log(response);
-      //          }, (response) => {
-      //             console.log(response);
+      var $this = this;
 
-      //          });
-
-      axios.post('/login', {
-        email: this.email,
-        password: this.password,
-        remember: this.remember
+      axios.post(this.action, { email: this.email, password: this.password, remember: this.remember
       }).then(function (response) {
-        console.log(response);
+        // console.log(response);
+        $this.success = response.data.message;
+        $this.error = '';
+        setTimeout(function () {
+          window.location = response.data.responseURL;
+        }, 200);
       }).catch(function (error) {
-        console.log(error);
+        $this.error = error.response.data.email;
       });
     }
   }
@@ -45223,6 +45235,17 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "panel-heading"
   }, [_vm._v("Login")]), _vm._v(" "), _c('div', {
     staticClass: "panel-body"
+  }, [(_vm.error) ? _c('div', {
+    staticClass: "alert alert-danger"
+  }, [_vm._v("\n                " + _vm._s(_vm.error) + "\n            ")]) : _vm._e(), _vm._v(" "), (_vm.success) ? _c('div', {
+    staticClass: "alert alert-success"
+  }, [_vm._v("\n                " + _vm._s(_vm.success) + "\n            ")]) : _vm._e(), _vm._v(" "), _c('form', {
+    staticClass: "form-horizontal",
+    attrs: {
+      "action": "login",
+      "role": "form",
+      "method": "POST"
+    }
   }, [_c('div', {
     staticClass: "form-group",
     class: {
@@ -45367,9 +45390,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "disabled": !_vm.isValid
     },
     on: {
-      "click": _vm.login
+      "click": _vm.validateForm
     }
-  }, [_vm._v("\n                            Login\n                        ")])])])])])])])])
+  }, [_vm._v("\n                            Login\n                        ")])])])])])])])])])
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -45414,6 +45437,436 @@ module.exports = function(module) {
 __webpack_require__(12);
 module.exports = __webpack_require__(13);
 
+
+/***/ }),
+/* 44 */,
+/* 45 */,
+/* 46 */,
+/* 47 */,
+/* 48 */,
+/* 49 */,
+/* 50 */,
+/* 51 */,
+/* 52 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    name: 'registerform',
+    props: {
+        action: {
+            type: String,
+            required: true
+        }
+    },
+    data: function data() {
+        return {
+            name: '',
+            email: '',
+            password: '',
+            pw_confirm: '',
+            success: '',
+            error: ""
+        };
+    },
+    computed: {
+        isValid: function isValid() {
+            return true;
+            // console.log(Object.keys(this.fields));
+            // Object.keys(this.fields).each(function(){
+
+            // });
+            // return this.$validator.errors;
+            // are some fields dirty?
+            // return Object.keys(this.fields).some(key => this.fields[key].valid);
+        }
+    },
+    methods: {
+        validateForm: function validateForm(e) {
+            var _this = this;
+
+            e.preventDefault();
+
+            this.$validator.validateAll().then(function () {
+
+                _this.register();
+            }).catch(function () {
+                // eslint-disable-next-line
+
+            });
+        },
+        register: function register() {
+
+            var $this = this;
+
+            axios.post(this.action, { email: this.email, password: this.password, name: this.name, password_confirmation: this.pw_confirm
+            }).then(function (response) {
+                // console.log(response);
+                $this.success = response.data.message;
+                $this.error = '';
+            }).catch(function (error) {
+                console.log(error);
+                $this.error = error.response.data.email;
+                $this.success = '';
+            });
+        }
+    }
+});
+
+/***/ }),
+/* 53 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__(9)(
+  /* script */
+  __webpack_require__(52),
+  /* template */
+  __webpack_require__(54),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "/home/mohammad/workspace/TodoList/resources/assets/js/components/auth/RegisterForm.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] RegisterForm.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-3e9c4df4", Component.options)
+  } else {
+    hotAPI.reload("data-v-3e9c4df4", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 54 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "container"
+  }, [_c('div', {
+    staticClass: "row"
+  }, [_c('div', {
+    staticClass: "col-md-8 col-md-offset-2"
+  }, [_c('div', {
+    staticClass: "panel panel-default"
+  }, [_c('div', {
+    staticClass: "panel-heading"
+  }, [_vm._v("Register")]), _vm._v(" "), _c('div', {
+    staticClass: "panel-body"
+  }, [(_vm.error) ? _c('div', {
+    staticClass: "alert alert-danger"
+  }, [_vm._v("\n                " + _vm._s(_vm.error) + "\n                ")]) : _vm._e(), _vm._v(" "), (_vm.success) ? _c('div', {
+    staticClass: "alert alert-success"
+  }, [_vm._v("\n                    " + _vm._s(_vm.success) + "\n                ")]) : _vm._e(), _vm._v(" "), _c('form', {
+    staticClass: "form-horizontal",
+    attrs: {
+      "role": "form",
+      "method": "post"
+    }
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.errors.has('name')
+    }
+  }, [_c('label', {
+    staticClass: "col-md-4 control-label",
+    attrs: {
+      "for": "name"
+    }
+  }, [_vm._v("Name")]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-6"
+  }, [_c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.name),
+      expression: "name"
+    }, {
+      name: "validate",
+      rawName: "v-validate",
+      value: ('required'),
+      expression: "'required'"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      "id": "name",
+      "type": "text",
+      "name": "name",
+      "autofocus": ""
+    },
+    domProps: {
+      "value": (_vm.name)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.name = $event.target.value
+      }
+    }
+  }), _vm._v(" "), _c('span', {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: (_vm.errors.has('name')),
+      expression: "errors.has('name')"
+    }],
+    staticClass: "help-block"
+  }, [_c('strong', [_vm._v(_vm._s(_vm.errors.first('name')))])])])]), _vm._v(" "), _c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.errors.has('email')
+    }
+  }, [_c('label', {
+    staticClass: "col-md-4 control-label",
+    attrs: {
+      "for": "email"
+    }
+  }, [_vm._v("E-Mail Address")]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-6"
+  }, [_c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.email),
+      expression: "email"
+    }, {
+      name: "validate",
+      rawName: "v-validate",
+      value: ('required|email'),
+      expression: "'required|email'"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      "id": "email",
+      "type": "email",
+      "name": "email"
+    },
+    domProps: {
+      "value": (_vm.email)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.email = $event.target.value
+      }
+    }
+  }), _vm._v(" "), _c('span', {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: (_vm.errors.has('email')),
+      expression: "errors.has('email')"
+    }],
+    staticClass: "help-block"
+  }, [_c('strong', [_vm._v(_vm._s(_vm.errors.first('email')))])])])]), _vm._v(" "), _c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.errors.has('password')
+    }
+  }, [_c('label', {
+    staticClass: "col-md-4 control-label",
+    attrs: {
+      "for": "password"
+    }
+  }, [_vm._v("Password")]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-6"
+  }, [_c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.password),
+      expression: "password"
+    }, {
+      name: "validate",
+      rawName: "v-validate",
+      value: ('required||min:6|confirmed:pw_confirm'),
+      expression: "'required||min:6|confirmed:pw_confirm'"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      "id": "password",
+      "type": "password",
+      "name": "password"
+    },
+    domProps: {
+      "value": (_vm.password)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.password = $event.target.value
+      }
+    }
+  }), _vm._v(" "), _c('span', {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: (_vm.errors.has('password')),
+      expression: "errors.has('password')"
+    }],
+    staticClass: "help-block"
+  }, [_c('strong', [_vm._v(_vm._s(_vm.errors.first('password')))])])])]), _vm._v(" "), _c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.errors.has('pw_confirm')
+    }
+  }, [_c('label', {
+    staticClass: "col-md-4 control-label",
+    attrs: {
+      "for": "password-confirm"
+    }
+  }, [_vm._v("Confirm Password")]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-6"
+  }, [_c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.pw_confirm),
+      expression: "pw_confirm"
+    }, {
+      name: "validate",
+      rawName: "v-validate",
+      value: ('required|min:6'),
+      expression: "'required|min:6'"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      "id": "password-confirm",
+      "type": "password",
+      "name": "pw_confirm"
+    },
+    domProps: {
+      "value": (_vm.pw_confirm)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.pw_confirm = $event.target.value
+      }
+    }
+  }), _vm._v(" "), _c('span', {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: (_vm.errors.has('pw_confirm')),
+      expression: "errors.has('pw_confirm')"
+    }],
+    staticClass: "help-block"
+  }, [_c('strong', [_vm._v(_vm._s(_vm.errors.first('pw_confirm')))])])])]), _vm._v(" "), _c('div', {
+    staticClass: "form-group"
+  }, [_c('div', {
+    staticClass: "col-md-6 col-md-offset-4"
+  }, [_c('button', {
+    staticClass: "btn btn-primary",
+    attrs: {
+      "type": "submit"
+    },
+    on: {
+      "click": _vm.validateForm
+    }
+  }, [_vm._v("\n                                    Register\n                                ")])])])])])])])])])
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-3e9c4df4", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);

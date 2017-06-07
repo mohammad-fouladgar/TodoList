@@ -20,6 +20,7 @@ Vue.use(VeeValidate);
 
 Vue.component('example', require('./components/Example.vue'));
 Vue.component('loginform', require('./components/auth/LoginForm.vue'));
+Vue.component('registerform', require('./components/auth/RegisterForm.vue'));
 
 const app = new Vue({
     el: '#app'

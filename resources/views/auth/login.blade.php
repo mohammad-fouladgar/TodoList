@@ -2,6 +2,6 @@
 
 @section('content')
 
-<loginform></loginform>
+<loginform action="{{ route('login') }}"></loginform>
 
 @endsection

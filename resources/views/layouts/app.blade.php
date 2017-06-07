@@ -71,6 +71,17 @@
             </div>
         </nav>
 
+        <!-- Flash success message -->
+    @if (Session::has('flash_message') )
+    <div class="col-md-10" style="float: none;margin: auto;text-align: center;">
+        <div class="alert alert-success">
+        {{ session('flash_message') }}
+        </div>
+    </div>
+    @endif
+    
+    <!-- /Flash success message -->
+
         @yield('content')
     </div>
 
