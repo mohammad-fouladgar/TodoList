@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-<data-viewer source="/api/user" title="Customer Data" />
+
+<todolist-viewer source="{{ route('user.todolists') }}" title="{{ auth()->user()->name }} Todolist" />
+
 @endsection
+
+

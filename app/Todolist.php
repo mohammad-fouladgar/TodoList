@@ -14,7 +14,15 @@ class Todolist extends Model
      * @var [type]
      */
      public static $columns = [
-        'id','user_id', 'title', 'description','status', 'created_at', 'updated_at'
+        'id', 'title', 'description','status', 'created_at'
+    ];
+
+    /**
+     * [$columns description]
+     * @var [type]
+     */
+     public static $statuses = [
+        'all','new','done','cancelled','failed'
     ];
 
     /**
@@ -40,6 +48,6 @@ class Todolist extends Model
      */
     public function tasks()
     {
-        return $this->hasMany('App\Todolist');
+        return $this->hasMany('App\Task');
     }
 }

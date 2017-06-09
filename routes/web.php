@@ -12,23 +12,59 @@
 */
 
 Route::get('/',function(){
-	return redirect()->to('dashboard');
+	return redirect()->route('dashboard');
 });
 
-Route::get('/api/user',function(){
+Route::group(['middleware'=>'auth'],function(){
+	
+	Route::get('/todos/{id}/tasks',function($id){
+		$model = auth()
+				  ->user()
+				  ->todolists()
+				  ->with(['tasks'=>function($q){
+				  	$q->select('*')->searchPaginateAndOrder();
+				  }])
+				  ->whereId($id)
+				  ->first();
+	
+		$columns = App\Task::$columns;
 
-	$model   = auth()->user()->todolists()->searchPaginateAndOrder();
-	$columns = App\Todolist::$columns;
+	    return response()
+	            ->json([
+	                'model' => $model,
+	                'columns' => $columns,
+	                'statuses'=>App\Task::$statuses
+	            ]);
 
-    return response()
-            ->json([
-                'model' => $model,
-                'columns' => $columns
-            ]);
+	})->name('tasks');
+
+	Route::get('/todolists',function(){
+		$model   = auth()
+		                ->user()
+		                ->todolists()
+		                ->searchPaginateAndOrder()->get(['id', 'title', 'description','status', 'created_at']);
+		
+		$columns = App\Todolist::$columns;
+
+	    return response()
+	            ->json([
+	                'model' => $model,
+	                'columns' => $columns,
+	                'statuses'=>App\Todolist::$statuses
+	            ]);
+	})->name('user.todolists');
 });
+
+
+
 
 Auth::routes();
 
-Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
+Route::get('/dashboard', 'ApiController@index')->name('dashboard');
+Route::get('/todolists/{id}', 'ApiController@tasks');
+Route::patch('/todolists/{id}/task/{taskid}','ApiController@updateTaskStatus');
+Route::delete('/todolists/{id}/task/{taskid}','ApiController@deleteTask');
+Route::delete('/todolists/{id}','ApiController@deleteTodolist');
+Route::patch('/todolists/{id}/cancel','ApiController@canceleTodolist');
 
 Route::get('register/confirm/{token}','Auth\RegisterController@confirmEmail')->name('auth.confirm.email');

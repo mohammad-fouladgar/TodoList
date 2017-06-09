@@ -10,7 +10,6 @@ require('./bootstrap');
 window.Vue = require('vue');
 
 import VeeValidate from 'vee-validate';
-import DataViewer from './components/DataViewer.vue';
 
 Vue.use(VeeValidate);
 /**
@@ -22,10 +21,9 @@ Vue.use(VeeValidate);
 Vue.component('example', require('./components/Example.vue'));
 Vue.component('loginform', require('./components/auth/LoginForm.vue'));
 Vue.component('registerform', require('./components/auth/RegisterForm.vue'));
+Vue.component('TodolistViewer', require('./components/TodolistViewer.vue'));
+Vue.component('TasksViewer', require('./components/TasksViewer.vue'));
 
 const app = new Vue({
     el: '#app',
-    components: {
-    	DataViewer
-	}
 });
