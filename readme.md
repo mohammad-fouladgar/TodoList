@@ -9,7 +9,7 @@
 
 - Clone this repo or download it's release archive and extract it somewhere
 - Run `composer install`
-- Configure your `.env` file for APP_KEY mailTrap:
+- Configure your `.env` file for APP_KEY mailTrap e.g:
 ```
 MAIL_DRIVER=smtp
 MAIL_HOST=smtp.mailtrap.io
@@ -21,7 +21,7 @@ MAIL_PASSWORD=9fffd67740c9ef
 - Run `npm install` and then Run `npm run dev`.
 ## Migrate database
 - Run `php artisan migrate` for Run the database migrations
-- Run `php artisan db:seed` for seed todolists and tasks  OR Run `php artisan db:seed --class=TasksTableSeeder` for only seed tasks.
+- Run `php artisan db:seed` for seed todolists and tasks tables OR Run `php artisan db:seed --class=TasksTableSeeder` for only seed tasks table.
 
 ## A Live PoC
 
