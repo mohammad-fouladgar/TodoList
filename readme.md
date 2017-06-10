@@ -31,4 +31,12 @@ MAIL_PASSWORD=9fffd67740c9ef
 php artisan serve
 ```
 
-#Enjoy!
+## Check failed tasks
+
+For check failed task run this command :
+
+`php artisan checktaskfailed`
+ OR
+ `php artisan schedule:run` for check daily task 
+
+# Enjoy!
