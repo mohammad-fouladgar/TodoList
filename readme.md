@@ -19,7 +19,7 @@ MAIL_PASSWORD=9fffd67740c9ef
 ```
 
 - Run `npm install` and then Run `npm run dev`.
-## Migrate database
+## Migrate database and seeds
 - Run `php artisan migrate` for Run the database migrations
 - Run `php artisan db:seed` for seed todolists and tasks tables OR Run `php artisan db:seed --class=TasksTableSeeder` for only seed tasks table.
 
