@@ -56,8 +56,6 @@ Route::group(['middleware'=>'auth'],function(){
 });
 
 
-
-
 Auth::routes();
 
 Route::get('/dashboard', 'ApiController@index')->name('dashboard');
@@ -66,5 +64,6 @@ Route::patch('/todolists/{id}/task/{taskid}','ApiController@updateTaskStatus');
 Route::delete('/todolists/{id}/task/{taskid}','ApiController@deleteTask');
 Route::delete('/todolists/{id}','ApiController@deleteTodolist');
 Route::patch('/todolists/{id}/cancel','ApiController@canceleTodolist');
+Route::get('/task/{taskid}/due/{day}','ApiController@updateTaskDueDate');
 
 Route::get('register/confirm/{token}','Auth\RegisterController@confirmEmail')->name('auth.confirm.email');

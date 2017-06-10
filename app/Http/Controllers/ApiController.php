@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Task;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class ApiController extends Controller
@@ -164,6 +165,30 @@ class ApiController extends Controller
         \DB::commit();
 
         return response()->json(['status'=>true]);
+    }
+
+   /**
+    * [updateTaskDueDate description]
+    * @param  [type] $taskId [description]
+    * @param  [type] $dueDay [description]
+    * @return [type]         [description]
+    */
+    public function updateTaskDueDate($taskId,$dueDay)
+    {
+        $current        = Carbon::now();
+        $task           = Task::whereId($taskId)->with('todolist')->firstOrFail();
+        
+        $task->due_date = $current->addDays($dueDay);
+        $status  = $task->status;
+        
+        if ($task->status == "failed") {
+            
+            $status = $task->status = "extended";
+        }
+
+        $task->update();
+
+       return response()->json(['status'=>$status,'due_date'=>$task->due_date]);
     }
 
 }

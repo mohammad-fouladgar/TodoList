@@ -38,7 +38,7 @@ class TasksTableSeeder extends Seeder
         		'todolist_id' => 1,
         		'title' => 'checkout product',
         		'description' => 'init checkout product',
-                'due_date' => '2017-06-10 10:15:00',
+                'due_date' => '2017-06-08 10:15:00',
         		'status' => 'new',
         		'created_at' => '2017-06-08 10:15:00',
         		'updated_at' => '2017-06-08 10:15:00'
@@ -58,7 +58,7 @@ class TasksTableSeeder extends Seeder
         		'todolist_id' => 2,
         		'title' => 'login user',
         		'description' => 'init login user',
-                'due_date' => '2017-06-10 10:15:00',
+                'due_date' => '2017-06-9 10:15:00',
         		'status' => 'new',
         		'created_at' => '2017-06-08 15:15:00',
         		'updated_at' => '2017-06-08 15:15:00'

@@ -24,6 +24,7 @@
               </span>
             </th>
             <th>Action</th>
+            <th>update Due date</th>
           </tr>
         </thead>
         <tbody>
@@ -34,14 +35,28 @@
            
             </td>
             <td>
-            <select class="select" v-on:change="updateStatus(row)" v-model="row.status">
+
+
+            <select class="select form-control" v-on:change="updateStatus(row,$event)" name='sts'>
               <option value="done">done</option>
               <option value="cancelled">cancelled</option>
             </select>
-            <button class="btn btn-danger" @click="deleteTask(row,index)" >
+            <span class="btn btn-danger" @click="deleteTask(row,index)" >
               <span class="glyphicon glyphicon-remove"></span> Delete 
-            </button>
+            </span>
 
+            </td>
+            <td>
+              
+              <select class="select form-control" v-on:change="updateDue(row,$event)" >
+              <option value="1">1 Days</option>
+              <option value="2">2 Days</option>
+              <option value="3">3 Days</option>
+              <option value="4">4 Days</option>
+              <option value="5">5 Days</option>
+              <option value="6">6 Days</option>
+              <option value="7">7 Days</option>
+            </select>
             </td>
           </tr>
         </tbody>
@@ -74,18 +89,22 @@
 
       classStatusObject(key,value){
         return {
-          'label label-default' : key   == 'status' && value == 'cancelled',
-          'label label-success' : key   == 'status' && value == 'done',
-          'label label-primary' : key   == 'status' && value == 'new',
-          'label label-danger'  : key   == 'status' && value == 'failed',
-          'label label-warning' : key   == 'status' && value == 'extended',
+          'label label-default' : key   == 'status'   && value == 'cancelled',
+          'label label-success' : key   == 'status'   && value == 'done',
+          'label label-primary' : key   == 'status'   && value == 'new',
+          'text-danger'  : key   == 'status'   && value == 'failed',
+          'label label-warning' : key   == 'status'   && value == 'extended',
+          'label label-danger'  : key   == 'due_date' && ! Date.parse(value),
         }
       },
-      updateStatus(task)
+      updateStatus(task,event)
       {
+        var newStatus = event.target.value;
+        
         var vm = this;
-        axios.patch('/todolists/'+this.model.id+'/task/'+task.id,{status : task.status})
+        axios.patch('/todolists/'+this.model.id+'/task/'+task.id,{status : newStatus})
           .then(function(response) {
+            task.status = newStatus;
             console.log(response.data);
           })
           .catch(function(response) {
@@ -93,6 +112,21 @@
           })
       },
 
+      updateDue(task,event){
+        var vm = this;
+        var due = event.target.value;
+
+        $.ajax({
+          url : '/task/'+task.id+'/due/'+due,
+          type:'get',
+          success :function(response){
+            task.status = response.status;
+            task.due_date = response.due_date;
+            // console.log(task);
+          }
+        });
+       
+      },
       deleteTask(task,index)
       {
         var vm = this;

@@ -4,10 +4,11 @@ namespace App;
 
 use App\Foundation\DataViewer;
 use Illuminate\Database\Eloquent\Model;
-
+use Carbon\Carbon;
 class Task extends Model
 {
     use DataViewer;
+
 
     /**
      * [$columns description]
@@ -34,11 +35,29 @@ class Task extends Model
         'title', 'description', 'status','due_date'
     ];
 
+    public $timestamps = false;
+
     /**
      * Get the todolist that owns the task.
      */
     public function todolist()
     {
         return $this->belongsTo('App\Todolist');
+    }
+
+    public function getDueDateAttribute($date)
+    {
+        $end    = Carbon::parse($date);
+        $now    = Carbon::now();
+        $length = $end->diffInDays($now);
+
+        if ($length < 7) {
+            
+            return $length.' remaining Days';
+        }elseif (!$length) {
+            return 'expired';
+        }
+        
+        return Carbon::parse($date)->format('Y-m-d');
     }
 }

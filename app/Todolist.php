@@ -34,6 +34,8 @@ class Todolist extends Model
         'title', 'description', 'status',
     ];
 
+    public $timestamps = false;
+
     /**
      * Get the user that owns the todolist.
      */

@@ -77,11 +77,11 @@
 
       classStatusObject(key,value){
         return {
-          'label'         : key   == 'status',
-          'label-default' : value == 'cancelled',
-          'label-success' : value == 'done',
-          'label-primary' : value == 'new',
-          'label-danger'  : value == 'failed',
+
+          'label label-default' : key   == 'status'   && value == 'cancelled',
+          'label label-success' : key   == 'status'   && value == 'done',
+          'label label-primary' : key   == 'status'   && value == 'new',
+          'label label-danger'  : key   == 'status'   && value == 'failed',
         }
       },
       tasks(id){
