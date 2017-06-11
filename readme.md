@@ -39,4 +39,16 @@ For check failed task run this command :
  OR
  `php artisan schedule:run` for check daily task 
 
+## Defualt users for login
+
+```
+username: mohammad@gmail.com
+password : 123456
+
+AND
+
+username: shahab@gmail.com
+password : 123456
+```
+
 # Enjoy!
