@@ -49,14 +49,15 @@ class Task extends Model
     {
         $end    = Carbon::parse($date);
         $now    = Carbon::now();
-        $length = $end->diffInDays($now);
+        $length = $now->diffInDays($end,false);
 
-        if ($length < 7) {
-            
-            return $length.' remaining Days';
-        }elseif (!$length) {
+        if ($length <= 0) {
             return 'expired';
         }
+        elseif ($length < 7 ) {
+            return $length.' remaining Days';
+        }
+        
         
         return Carbon::parse($date)->format('Y-m-d');
     }
