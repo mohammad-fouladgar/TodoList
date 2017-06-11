@@ -39,7 +39,7 @@ For check failed task run this command :
  OR
  `php artisan schedule:run` for check daily task 
 
-## Defualt users for login
+## Default users for login
 
 ```
 username: mohammad@gmail.com
